@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Graph from "./Graph";
+import CustomAlert from "./CustomAlert";
 
 function Game3({ X1, X2, Y1, Y2, setPage,transitType,isTimer,timer,totalLaps }:{X1:number,X2:number,Y1:number,Y2:number,setPage:any,transitType:number,isTimer:boolean,timer:number,totalLaps:number}) {
   const [step, setStep] = useState<number>(0);
@@ -7,7 +8,10 @@ function Game3({ X1, X2, Y1, Y2, setPage,transitType,isTimer,timer,totalLaps }:{
   const [carX, setCarX] = useState<number>(0);
   const [carY, setCarY] = useState<number>(0);
   const [lap, setLap] = useState<number>(0);
-  const [isFlag, setIsFlag] = useState<boolean>(false);
+  const [alertType,setAlertType]=useState<string>("success");
+  const [message,setMessage]=useState<string>("");
+  const [showAlert,setShowAlert]=useState<boolean>(false);
+
 
   const [flagPos, setFlagPos] = useState<[number, number]|null>([0, 0]);
   // const [inputX, setInputX] = useState(0);
@@ -220,10 +224,10 @@ function Game3({ X1, X2, Y1, Y2, setPage,transitType,isTimer,timer,totalLaps }:{
     setIsCountDownPaused(true);
     let x1 = carX;
     let y1 = carY;
-    let x2:number|null = flagPos?.[0]||null;
-    let y2:number|null = flagPos?.[1]||null;
+    let x2:number|undefined = flagPos?.[0];
+    let y2:number|undefined = flagPos?.[1]
     setSubmitted(true);
-    if(x2!=null && y2!=null){if(transitType==1){
+    if(x2!=undefined && y2!=undefined){if(transitType==1){
       await translateCar1(x2, y2)
       setCarX(0);
         setCarY(0);
@@ -243,25 +247,26 @@ function Game3({ X1, X2, Y1, Y2, setPage,transitType,isTimer,timer,totalLaps }:{
         setWon(true);
         setIsCountDownPaused(true);
       } else {
-        // swal("Correct answer", "", "success", {
-        //   button: false,
-        //   timer: 1000,
-        // }); // fix later
+        showMessage("Correct answer",1500,'success')
         setLap(lap + 1);
         handleSetTargetPos();
       }
       setLap(lap + 1);
     } else {
-      // swal("Wrong answer", "Try again", "error", {
-      //   button: false,
-      //   timer: 1000,
-      // }); // fix later
+      showMessage("Try again",1500,'wrong')
     }
     
     setSubmitted(false);
   };
 
-
+  const showMessage = (message:string, time:number, type:string) => {
+    setAlertType(type);
+    setMessage(message);
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false);
+    }, time);
+  };
   const handleReset = () => {
     setCarX(0);
     setCarY(0);
@@ -278,11 +283,11 @@ function Game3({ X1, X2, Y1, Y2, setPage,transitType,isTimer,timer,totalLaps }:{
   };
   return (
     <>
-      <div> 
+      <div className="flex flex-col lg:flex-row lg:items-center" style={{ minHeight: "100vh" }}> 
         {/* Row */}
-        <div className="p-1 px-lg-5 d-flex justify-content-center align-items-center">
+        <div className="p-1 lg:px-5 flex justify-center items-center w-100 lg:w-2/3">
           {/* Col  lg={8} */}
-          <div className="w-75 ms-md-auto mx-auto my-3 bg-success">
+          <div className="w-full md:w-3/4 md:ms-auto mx-auto my-3 bg-green-800">
             <Graph
               x1={X1 - 1}
               x2={X2 + 1}
@@ -305,12 +310,12 @@ function Game3({ X1, X2, Y1, Y2, setPage,transitType,isTimer,timer,totalLaps }:{
             ></Graph>
           </div>
         </div>
-        <div>
+        <div className="w-100 lg:w-1/3">
           {/* Col lg={4} */}
-          <div className="pt-lg-5 "> 
+          <div className="lg:pt-5 flex flex-row flex-wrap lg:flex-col "> 
           {/* Row */}
             <div
-              className="d-flex justify-content-center align-items-center mb-lg-5"
+              className="flex w-1/3 lg:w-100 mx-auto justify-center items-center lg:mb-5"
             > 
             {/*Col lg={12}
               xs={4} */}
@@ -318,60 +323,60 @@ function Game3({ X1, X2, Y1, Y2, setPage,transitType,isTimer,timer,totalLaps }:{
                 onClick={() => {
                   setPage("menu");
                 }}
-                className="fs-6 p-1 p-sm-2 px-sm-3"
+                className="text-sm p-1 sm:p-2 sm:px-3 btn btn-primary"
 
               >
-                Back to menu
+                Back&nbsp;to&nbsp;menu
               </button>
             </div>
-            <div
-              className="d-flex justify-content-center align-items-center"
+            <div className="flex w-full sm:w-1/3 lg:w-full justify-center items-center"
             >
               {/* Col lg={12}
               xs={4} */}
-              <h1 className="text-white">
+              <p className="text-white text-3xl">
                 <i className="fa-regular fa-clock"></i>
-              </h1>
-              <h2 className="text-white">&nbsp;&nbsp;:&nbsp;&nbsp;</h2>
-              <h1 className="text-white"> {isTimer?Math.floor(countDown/1000):Math.floor(step / 10)} s</h1>
+              :&nbsp;&nbsp;</p>
+              <p className="text-white text-3xl"> {isTimer?Math.floor(countDown/1000):Math.floor(step / 10)} s</p>
             </div>
-            <div
-              className="d-flex justify-content-center align-items-center"
+            <div className="flex w-full sm:w-1/3  lg:w-full  justify-center items-center"
             >
               {/* Col
               lg={12}
               xs={4} */}
-              <img src="flag.png" alt="flag" height={40} />
-              <h2 className="text-white">&nbsp;&nbsp;:&nbsp;&nbsp;</h2>
-              <h1 className="text-white">
+              <img src="flag.png" alt="flag" className="w-5"/>
+              <p className="text-white text-3xl">:&nbsp;&nbsp;</p>
+              <p className="text-white text-3xl">
                 {" "}
                 {lap}/{totalLaps}
-              </h1>
+              </p>
             </div>
-            <div
-              className="d-flex justify-content-center align-items-center " >
-                {/* Col xs={12} */}
-            <small className="text-white fs-6">(Place the flag and hit Go!)</small>
+            <div className="flex  lg:w-full flex-col justify-center items-center w-full">
 
-            </div>
-                    
-            <div
-              className="d-flex justify-content-center align-items-center mt-2"
-            >
-              {/* Col
-              xs={12} */}
-              <p className="text-white fs-1">Go to ({targetPos?.[0]}, {targetPos?.[1]})</p>
-              <button
-                disabled={submitted || !valid}
-                onClick={handleSubmit}
-                className="fs-6 p-1 p-sm-2 px-sm-3"
-
+                      
+              <div
+                className="flex justify-center items-center mt-2 w-full "
               >
-                Go!
-              </button>
+                {/* Col
+                xs={12} */}
+                <p className="text-white text-5xl">Go to ({targetPos?.[0]}, {targetPos?.[1]})</p>
+                <button
+                  disabled={submitted || !valid}
+                  onClick={handleSubmit}
+                  className="text-sm p-1 sm:p-2 sm:px-3 btn btn-warning"
+  
+                >
+                  Go!
+                </button>
+              </div>
+              <div
+                className="flex w-full  justify-center items-center " >
+                  {/* Col xs={12} */}
+              <small className="text-white text-sm">(Click on the grid to place the flag and hit Go!)</small>
+  
+             </div>
             </div>
             <div
-              className="d-flex justify-content-center align-items-center mt-2"
+              className="flex justify-center items-center w-full sm:w-1/2 lg:w-full"
             >
               {/* Col
               lg={12}
@@ -379,21 +384,21 @@ function Game3({ X1, X2, Y1, Y2, setPage,transitType,isTimer,timer,totalLaps }:{
               <button
                 disabled={submitted || !valid}
                 onClick={() => setShowPaths(!showPaths)}
-                className="fs-6 p-1"
+                className="text-xs p-1 btn btn-primary"
 
               >
                 {showPaths?'Hide paths':'Show paths'}
               </button>
               <button
                 onClick={() => setPaths([])}
-                className="fs-6 p-1"
+                className="text-xs p-1 btn btn-primary"
                 disabled={paths.length===0}
               >
                 Clear paths
               </button>
             </div>
             <div
-              className="d-flex justify-content-center align-items-center mt-2"
+              className="flex justify-center items-center mt-2 w-full sm:w-1/2 lg:w-full"
             >
               {/* Col
               lg={12}
@@ -401,14 +406,14 @@ function Game3({ X1, X2, Y1, Y2, setPage,transitType,isTimer,timer,totalLaps }:{
               <button
                 disabled={submitted || !valid}
                 onClick={() => setShowCoordinates(!showCoordinates)}
-                className="fs-6 p-1"
+                className="text-xs p-1 btn btn-primary"
 
               >
                 {showCoordinates?<>Hide<br/>coordinates</>:<>Show<br/>coordinates</>}
               </button>
               <button
                 onClick={() => setCoordinates([])}
-                className="fs-6 p-1"
+                className="text-sm p-1 btn btn-primary"
                 disabled={coordinates.length===0}
               >
                 Clear<br/>coordinates
@@ -423,48 +428,49 @@ function Game3({ X1, X2, Y1, Y2, setPage,transitType,isTimer,timer,totalLaps }:{
         // keyboard={false}
         // size="lg"
         data-bs-theme="dark"
-        className="rounded-5"
+        className="rounded-lg alert-container backdrop-blur-sm" style={{ backgroundImage: "url('celebrate.gif')" }}
       >
         <div
-          className="p-5 text-center bg-dark rounded-5 text-light"
-          style={{ backgroundImage: "url('celebrate.gif')" }}
+          className="p-5 text-center bg-black rounded-lg text-white alert-box"
+          
         >
           <h1>You won!</h1>
           <h3>You took {Math.floor(winTime / 10)} seconds</h3>
-          <div className="d-flex justify-content-evenly">
-            <button className="fs-2" onClick={() => setPage("menu")}>
+          <div className="flex justify-evenly">
+            <button className="text-xl  btn btn-primary" onClick={() => setPage("menu")}>
               Back to menu
             </button>
-            <button className="fs-2" onClick={handleReset}>
+            <button className="text-xl  btn btn-warning" onClick={handleReset}>
               Play again
             </button>
           </div>
         </div>
       </div>}
-      {isTimeUp && <div
+      {isTimeUp && !won&& <div 
         // onHide={handleReset}
         // backdrop="static"
         // keyboard={false}
         
         data-bs-theme="dark"
-        className="rounded-5"
+        className="alert-container "
       >
         <div
-          className="p-5 text-center bg-dark rounded-5 text-light"
+          className="p-5 text-center bg-black rounded-lg text-white alert-box"
         >
-          <h1 className="text-danger">Time up!</h1>
-          <h3>You cleared {lap} out of {totalLaps} rounds</h3>
-          <h3>Don't worry, you can try again</h3>
-          <div className="d-flex justify-content-evenly">
-            <button className="fs-2" onClick={() => setPage("menu")}>
+          <p className="text-red-700 text-4xl">Time up!</p>
+          <p className="text-xl">You cleared {lap} out of {totalLaps} rounds</p>
+          <p text-xl>Don't worry, you can try again</p>
+          <div className="flex justify-evenly">
+            <button className="text-md  btn btn-primary" onClick={() => setPage("menu")}>
               Back to menu
             </button>
-            <button className="fs-2" onClick={handleReset}>
+            <button className="text-md  btn btn-warning" onClick={handleReset}>
               Play again
             </button>
           </div>
         </div>
       </div>}
+      {showAlert && <CustomAlert message={message} type={alertType} />}
     </>
   );
 }

@@ -117,7 +117,7 @@ All quadrants
                 />:
               </label>
 
-              <select onChange={(e) => setTimer(parseInt(e.target.value))} value={timer} disabled={!isTimer} className={`m-2 text-black p-2 ${isTimer ? "" : "primary"}}`}>
+              <select onChange={(e) => setTimer(parseInt(e.target.value))} value={timer} disabled={!isTimer} className={`m-2 text-black p-2 rounded ${isTimer ? "" : "primary"}}`}>
               <option value={10*1000}>10 sec</option>
               <option value={20*1000}>20 sec</option>
               <option value={30*1000}>30 sec</option>
@@ -130,7 +130,7 @@ All quadrants
             </div>
             <div className="flex justify-between items-center">
               <label htmlFor="rounds-per-game" className="mx-2 flex">Rounds&nbsp;per&nbsp;game&nbsp;:&nbsp;</label>
-              <select onChange={(e) => setTotalLaps(parseInt(e.target.value))} value={totalLaps} className="m-2 text-black p-2">
+              <select onChange={(e) => setTotalLaps(parseInt(e.target.value))} value={totalLaps} className="m-2 text-black p-2 rounded">
                 <option value={5}>5</option>
                 <option value={6}>6</option>
                 <option value={7}>7</option>

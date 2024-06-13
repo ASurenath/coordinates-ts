@@ -72,9 +72,9 @@ function Game1({
   return (
     <>
     
-      <div className="flex flex-col lg:flex-row flex-wrap " style={{ minHeight: "100vh" }}> {/* Row* */}
-        <div className="p-1 lg:px-5 flex justify-content-center align-items-center w-100 lg:w-4/6 ">{/* Col lg={8}*/}
-          <div className=" my-3 w-full">
+      <div className="flex flex-col md:flex-row  lg:items-center" style={{ minHeight: "100vh" }}> {/* Row* */}
+        <div className="p-1 px-5 flex justify-content-center align-items-center w-100 md:w-4/6 ">{/* Col lg={8}*/}
+          <div className=" my-3 w-full lg:w-3/4 mx-auto">
           <Graph
               x1={X1-1}
               x2={X2+1}
@@ -91,8 +91,8 @@ function Game1({
             ></Graph>
           </div>
         </div>
-        <div className="w-100 lg:w-2/6"> {/*Col lg={4}*/}
-          <div className="lg:pt-5 lg:mt-5">
+        <div className="w-100 md:w-2/6"> {/*Col lg={4}*/}
+          <div className="lg:pt-5 lg:mt-5 ">
             <div
               className="flex justify-center items-center xs:w-100"
             > {/* Col xs={12}*/}
@@ -106,21 +106,22 @@ function Game1({
               </button>
             </div>
             <div
-              className="flex justify-center items-center xs:w-100" > {/* Col xs={12} */}
+              className="flex flex-row justify-center items-center xs:w-100" > {/* Col xs={12} */}
             <small className="text-white fs-6">(Click on the graph or enter coordinates)</small>
 
-            </div>
- 
+ </div>
+ <div className="flex flex-row md:flex-col justify-center items-center xs:w-100" > {/* Col xs={12} */}
+
+
             <div
-              className="flex justify-center items-center mt-2 xs:w-1/3 lg:w-100"
+              className="flex  justify-center items-center mt-2 xs:w-1/3 lg:w-100 mx-2"
             > {/* Col
             lg={12}
             xs={4} */}
-              <h1 className="text-white">x</h1>
-              <h2 className="text-white">&nbsp;&nbsp;:&nbsp;&nbsp;</h2>
+              <p className="text-white text-3xl">x:&nbsp;</p>
               <input
                 type="number"
-                className="form-control small-input"
+                className=" small-input rounded text-center"
                 value={inputX}
                 onChange={(e) =>
                   handleSetInput(e.target.value, setInputX,X1 , X2)
@@ -138,11 +139,10 @@ function Game1({
               className="flex justify-center items-center mt-2"
             >{/* Col lg={12}
             xs={4} */}
-              <h1 className="text-white">y</h1>
-              <h2 className="text-white">&nbsp;&nbsp;:&nbsp;&nbsp;</h2>
+              <p className="text-white text-2xl">y:&nbsp;&nbsp;</p>
               <input
                 type="number"
-                className="form-control small-input"
+                className="rounded small-input text-center"
                 value={inputY}
                 onChange={(e) =>
                   handleSetInput(e.target.value, setInputY, Y1, Y2)
@@ -168,6 +168,8 @@ function Game1({
               >
                 Set flag
               </button>
+              </div>
+
             </div>
           </div>
         </div>

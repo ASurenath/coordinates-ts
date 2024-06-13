@@ -1,6 +1,6 @@
 import React from "react";
 
-function CustomAlert({ message, type,longMessage }:{message:string,type:string,longMessage:string}) {
+function CustomAlert({ message, type,longMessage }:{message:string,type:string,longMessage?:string}) {
   return (
     <div className={`alert-container custom-alert-${type}`}>
       <div className="alert-box bg-black rounded p-2 sm:px-5 flex flex-col items-center justify-center text-center mx-auto">
@@ -51,7 +51,7 @@ function CustomAlert({ message, type,longMessage }:{message:string,type:string,l
 
         <div className="message-box  rounded p-3 "><h1 className="text-white">{message}</h1>
         
-        <p className="text-white">{longMessage}</p>
+        {longMessage&&<p className="text-white">{longMessage}</p>}
         </div>
 
       </div>

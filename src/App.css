@@ -12,7 +12,7 @@
   text-decoration: none !important;
   outline: none !important;
   font-family: 'Carter One', sans-serif;
-  font-size: 20px;
+  /* font-size: 20px; */
   line-height: 1.5em;
   letter-spacing: .1em;
   text-shadow: 2px 2px 1px #0066a2, -2px 2px 1px #0066a2, 2px -2px 1px #0066a2, -2px -2px 1px #0066a2, 0px 2px 1px #0066a2, 0px -2px 1px #0066a2, 0px 4px 1px #004a87, 2px 4px 1px #004a87, -2px 4px 1px  #004a87;
@@ -98,7 +98,7 @@ select[disabled] {
   z-index: 1002;
   width:100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.288);
+  background-color: rgba(0, 0, 0, 0.613);
   top: 0;
   left: 0;
 }
@@ -216,3 +216,6 @@ select[disabled] {
     -webkit-animation: colored-circle 0.6s ease-in-out 0.7s backwards;
     animation: colored-circle 0.6s ease-in-out 0.7s backwards;
 } 
+.text-outline{
+  text-shadow: -1px -1px 0 #000000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}

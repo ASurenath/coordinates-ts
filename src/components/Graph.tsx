@@ -3,18 +3,18 @@ import React, { useEffect, useRef, useState } from "react";
 const renderRipple = (x: number, y: number) => {
   return (
     <>
-      <circle r="0.5em" cx={x} cy={y} opacity={0.5} fill="#fff" >
+      <circle r="0.1" cx={x} cy={y} opacity={0.5} fill="#fff" >
         <animate
           attributeName="r"
           begin="0s"
-          dur="1s"
-          from="0.1em"
-          to="1em"
+          dur="1.5s"
+          from="0.05"
+          to="2"
           repeatCount="indefinite" />
         <animate
           attributeName="opacity"
           begin="0s"
-          dur="1s"
+          dur="1.5s"
           from="1"
           to="0"
           repeatCount="indefinite" />
@@ -29,7 +29,6 @@ function Graph({ x1, x2, y1, y2, carX, carY, carAngle, flagType, flagX, flagY, c
   const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
   const [hoveredPoint, setHoveredPoint] = useState<[number, number] | null>(null);
 
-  console.log(learnMode);
   const graphBox = useRef<HTMLDivElement>(null);
   const findXPosPercent = (x: number) => {
     return ((x - x1) / (x2 - x1)) * 100
@@ -135,7 +134,7 @@ function Graph({ x1, x2, y1, y2, carX, carY, carAngle, flagType, flagX, flagY, c
     return lines?.map((line) => line);
   };
   const renderFlagDistance = () => {
-    if(flagX && flagY){return (
+    if(flagX!=null && flagY!=null){return (
       <>
         <line
           x1={findXPosPercent(flagX)}
@@ -152,13 +151,13 @@ function Graph({ x1, x2, y1, y2, carX, carY, carAngle, flagType, flagX, flagY, c
           y2={findYPosPercent(flagY)}
           style={{ stroke: "yellow", strokeWidth: 0.4, strokeDasharray: "0.4 0.4" }}
         />
-        <text fill="yellow" x={findXPosPercent(flagX)} y={findYPosPercent(flagY)} fontSize={3} alignmentBaseline={flagY>=0?"before-edge":"after-edge"} textAnchor={flagX>=0?"start":"end"}>({flagX},{flagY})</text>
-
-        <text fill="black" x={findXPosPercent(flagX/2)} y={findYPosPercent(flagY)} fontSize={3} alignmentBaseline="before-edge" textAnchor="middle">←{flagX}→</text>
-        <text fill="black" x={findXPosPercent(flagX)} y={findYPosPercent(flagY/2)} fontSize={3} alignmentBaseline="before-edge" textAnchor="middle" style={{transform: "rotate(-90deg)",transformOrigin:`${findXPosPercent(flagX)} ${findYPosPercent(flagY/2)}`
-}}
-        
-        >←{flagY}→</text>
+        <text fill="yellow" x={findXPosPercent(flagX)} y={findYPosPercent(flagY)} fontSize={3} alignmentBaseline={flagY>=0?"before-edge":"after-edge"}  className="text-outline" textAnchor={flagX>=0?"start":"end"}>({flagX},{flagY})</text>
+        <text fill="yellow" x={findXPosPercent(flagX/2)} y={findYPosPercent(flagY)} fontSize={3} alignmentBaseline="before-edge" textAnchor="middle" className="text-outline">←{flagX}→</text>
+        <text fill="yellow" x={findXPosPercent(flagX)} y={findYPosPercent(flagY/2)} fontSize={3} alignmentBaseline="before-edge" textAnchor="middle" className="text-outline"
+        style={{transform: "rotate(-90deg)",
+        transformOrigin:findXPosPercent(flagX) + "% " + findYPosPercent(flagY/2)+ "%",
+        }}
+>←{flagY}→</text>
 
 
       </>
@@ -172,7 +171,7 @@ function Graph({ x1, x2, y1, y2, carX, carY, carAngle, flagType, flagX, flagY, c
     let y = Math.round((e.clientY - rect.height - rect.y) * (y1 - y2) / rect.height) + y1
     e = e.touches?.[0] || e;
     if (x > x1 && x < x2 && y > y1 && y < y2) { setHoveredPoint([x, y]); }
-    else if (flagX && flagY) { setHoveredPoint([flagX, flagY]); }}
+    else if (flagX!=null && flagY!=null) { setHoveredPoint([flagX, flagY]); }}
     else{
       setHoveredPoint(null);
     }
@@ -208,19 +207,19 @@ function Graph({ x1, x2, y1, y2, carX, carY, carAngle, flagType, flagX, flagY, c
         {renderYticks()}
 
 
-        {flagX && flagY && <>
+        {flagX !=null&& flagY!=null && <>
           <circle cx={findXPosPercent(flagX)} cy={findYPosPercent(flagY)} r="1" fill="white" />
           <image x={findXPosPercent(flagX)} y={findYPosPercent(flagY + 0.7)} height={0.7 / (x2 - x1) * 100 + "%"} href={flagType == "final" ? "finalflag.png" : "flag.png"} /></>
         }
 
-        {paths?.map((path, id) => path && <line key={`(${path.x1},${path.y1})to(${path.x2},${path.y2})-${id}`} x1={findXPosPercent(path.x1)} y1={findYPosPercent(path.y1)} x2={findXPosPercent(path.x2)} y2={findYPosPercent(path.y2)} style={{ stroke: path.color, strokeWidth: 1 }} />
+        {paths?.map((path, id) => path && <line key={`(${path.x1},${path.y1})to(${path.x2},${path.y2})-${id}`} x1={findXPosPercent(path.x1)} y1={findYPosPercent(path.y1)} x2={findXPosPercent(path.x2)} y2={findYPosPercent(path.y2)} style={{ stroke: path.color, strokeWidth: 0.5 }} />
         )}
 
         {coordinates?.map((coordinate, id) => <React.Fragment key={`(${coordinate.x},${coordinate.y})-${id}`}>
-          <circle cx={findXPosPercent(coordinate.x)} cy={findYPosPercent(coordinate.y)} r="5" fill={coordinate.color} />
-          <text x={findXPosPercent(coordinate.x)} y={findYPosPercent(coordinate.y)} style={{ fontSize: 3 }} fill={coordinate.color}>({coordinate.x},{coordinate.y})</text>
+          <circle cx={findXPosPercent(coordinate.x)} cy={findYPosPercent(coordinate.y)} r="1" fill={coordinate.color} />
+          <text x={findXPosPercent(coordinate.x)} y={findYPosPercent(coordinate.y)} style={{ fontSize: 3 }} fill={coordinate.color} className="text-outline">({coordinate.x},{coordinate.y})</text>
         </React.Fragment>)}
-        {carX&&carY&&carAngle && <image
+        {carX!=null&&carY!=null&&carAngle!=null && <image
           x={findCarXPosPercent(carX)}
           y={findCarYPosPercent(carY)}
           height={1 / (x2 - x1) * 100 + "%"}
